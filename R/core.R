@@ -1561,8 +1561,9 @@ synth.mc<-function(Y, # Outcome variable, (T*N) matrix
       }
     }
 
-    initialOut <- try(initialFit(data.ini, force, oci), silent = TRUE)
+    initialOut <- try(initialFit(data.ini, force, oci), silent = FALSE)
     if('try-error' %in% class(initialOut)) {
+        print("Failure mode: need smaller factor number or something")
         return(list(att = rep(NA, TT), att.avg = NA, beta = matrix(NA, p, 1), eff = matrix(NA, TT, Ntr)))
         ## stop("Error occurs. Please set a smaller value of factor number.")
     }
@@ -1578,6 +1579,16 @@ synth.mc<-function(Y, # Outcome variable, (T*N) matrix
     
     if (CV == FALSE) { ## case: CV==0 or no factor  
         ## matrix completion
+        print("About to run inter_fe_mc")
+        print( YY)
+        print( Y0)
+        print( X)
+        print( II)
+        print( beta0)
+        print( hasF)
+        print( lambda[1])
+        print( force)
+        print( tol) 
         est.best <- inter_fe_mc(YY, Y0, X, II, beta0, hasF, lambda[1], force, tol) 
 
         if (p > 0) {
