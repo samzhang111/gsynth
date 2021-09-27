@@ -2379,6 +2379,18 @@ synth.boot<-function(Y,
                                          CV = 0, tol = tol, AR1 = AR1, beta0 = beta.it, norm.para = norm.para), silent = FALSE)
                     if ('try-error' %in% class(boot)) {
                         print("Failure mode 1")
+                        print("lambda")
+                        print(out$lambda.cv)
+                        print("hasF")
+                        print(out$validF)
+                        print("tol")
+                        print(tol)
+                        print("AR1")
+                        print(AR1)
+                        print("beta0")
+                        print(beta.it)
+                        print("norm.para")
+                        print(norm.para)
                         
                         boot0 <- list(att.avg = NA, 
                                       beta = NA,
@@ -2392,6 +2404,8 @@ synth.boot<-function(Y,
                         if ("eff" %in% names(boot)) {
                             return(boot)
                         } else {
+                            print("Failure mode 2")
+
                             boot0 <- list(att.avg = NA, 
                                       beta = NA,
                                       att = NA,
