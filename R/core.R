@@ -2325,12 +2325,17 @@ synth.boot<-function(Y,
             }
         } else { ## mc
             one.nonpara <- function(num = NULL){
-
                 if (!is.null(num)) {
                     boot.id <- (1:N)[-num]
                 } else {
                     if (is.null(cl)) {
-                        fake.co <- sample(id.co, Nco, replace = TRUE)
+                        repeat {
+                            fake.co <- sample(id.co, Nco, replace = TRUE)
+                            if (sum(apply(as.matrix(I[,fake.co]),1,sum) >= 1) == TT) {
+                                break
+                            }
+                        }
+
                         boot.id <- c(sample(id.tr, Ntr, replace = TRUE), fake.co)
                     } else {
                         cl.boot <- sample(cl.unique, length(cl.unique), replace = TRUE)
@@ -2342,7 +2347,7 @@ synth.boot<-function(Y,
                         }
                     }
                 }
-                
+            
                 Y.boot <- Y[,boot.id]
                 X.boot <- NULL
                 if (p > 0) {
@@ -2355,11 +2360,7 @@ synth.boot<-function(Y,
                     W.boot <- W[,boot.id]
                 }
 
-                con1 <- sum(apply(I.boot,1,sum) >= 1) == TT
-                con2 <- sum(apply(I.boot,2,sum) >= 1) == N
-                con3 <- sum(D.boot) > 0
-
-                if (!is.null(num) && (!con1 || !con2 || !con3)) {
+                if (sum(D.boot) == 0) { ## no treated observations
                     
                     boot0 <- list(att.avg = NA, 
                                   beta = NA,
@@ -2368,7 +2369,7 @@ synth.boot<-function(Y,
                                   D.tr = NA,
                                   I.tr = NA)
                     return(boot0)
-                
+                    
                 } else {
                     boot <- try(synth.mc(Y.boot, X.boot, D.boot, I = I.boot,
                                          W = W.boot, force = force, 
