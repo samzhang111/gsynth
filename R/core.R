@@ -2324,6 +2324,7 @@ synth.boot<-function(Y,
                 } 
             }
         } else { ## mc
+            print("Hello world")
             one.nonpara <- function(num = NULL){
                 if (!is.null(num)) {
                     boot.id <- (1:N)[-num]
