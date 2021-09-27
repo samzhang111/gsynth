@@ -2361,6 +2361,7 @@ synth.boot<-function(Y,
                 }
 
                 if (sum(D.boot) == 0) { ## no treated observations
+                    print("Failure mode 0")
                     
                     boot0 <- list(att.avg = NA, 
                                   beta = NA,
@@ -2374,8 +2375,9 @@ synth.boot<-function(Y,
                     boot <- try(synth.mc(Y.boot, X.boot, D.boot, I = I.boot,
                                          W = W.boot, force = force, 
                                          lambda = out$lambda.cv, hasF = out$validF, 
-                                         CV = 0, tol = tol, AR1 = AR1, beta0 = beta.it, norm.para = norm.para), silent = TRUE)
+                                         CV = 0, tol = tol, AR1 = AR1, beta0 = beta.it, norm.para = norm.para), silent = FALSE)
                     if ('try-error' %in% class(boot)) {
+                        print("Failure mode 1")
                         
                         boot0 <- list(att.avg = NA, 
                                       beta = NA,
